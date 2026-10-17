@@ -219,7 +219,9 @@ export function ShelfCard({ item, className }: Props) {
           )}
         />
         {isVideo && item.duration ? (
-          <span className="pointer-events-none absolute bottom-1.5 left-1.5 rounded-md bg-black/65 px-1.5 py-1 text-[11px] font-medium leading-none text-white backdrop-blur-sm">
+          // No backdrop-blur: WebKitGTK re-blurs a backdrop-filter every
+          // scroll frame, so a shelf of these tanks the page.
+          <span className="pointer-events-none absolute bottom-1.5 left-1.5 rounded-md bg-black/65 px-1.5 py-1 text-[11px] font-medium leading-none text-white">
             {formatDuration(item.duration)}
           </span>
         ) : null}
@@ -237,7 +239,7 @@ export function ShelfCard({ item, className }: Props) {
             />
             <div
               title="Hidden from sidebar"
-              className="absolute right-1.5 top-1.5 flex items-center justify-center rounded-md bg-black/65 p-1 text-white shadow-sm backdrop-blur-sm"
+              className="absolute right-1.5 top-1.5 flex items-center justify-center rounded-md bg-black/65 p-1 text-white shadow-sm"
             >
               <EyeOffIcon className="size-4" />
             </div>
