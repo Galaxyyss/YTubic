@@ -29,6 +29,10 @@ mod discord;
 #[cfg(target_os = "linux")]
 mod linux_graphics;
 mod media;
+// Taskbar thumbnail toolbar (prev / play-pause / next under the taskbar
+// preview). Windows-only shell surface; see src/thumbbar.rs.
+#[cfg(windows)]
+mod thumbbar;
 // Grants the microphone to our own pages without WebView2's dialog; the
 // Playback tab needs it to name and pick output devices. Ported from
 // upstream 8cdb647.
@@ -3660,6 +3664,10 @@ pub fn run() {
             // thread, which souvlaki requires and where the main window's
             // HWND is available.
             media::init(app.handle());
+            // Play / pause / next under the taskbar thumbnail preview. Also
+            // main-thread-only (COM + a subclass on the main window's HWND).
+            #[cfg(windows)]
+            thumbbar::init(app.handle());
             // The NSIS installer registers `ytubic://` for release builds;
             // dev runs and Linux need the runtime registration.
             #[cfg(any(target_os = "linux", all(debug_assertions, windows)))]
