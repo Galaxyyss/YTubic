@@ -36,7 +36,11 @@ import {
   TrackRowSkeletonList,
 } from "@/components/shared/skeletons";
 import { Input } from "@/components/ui/input";
-import { frostedSurface } from "@/components/ui/frosted";
+import {
+  MENU_ITEM,
+  MENU_PANEL,
+  MENU_SEPARATOR,
+} from "@/components/ui/menu-chrome";
 import { useSearchHistory } from "@/lib/store/search-history";
 import { usePlaybackStore } from "@/lib/store/playback";
 import { openSettings } from "@/lib/store/settings-dialog";
@@ -170,11 +174,12 @@ function FilterChip({
   return (
     <button
       type="button"
+      aria-pressed={active}
       onClick={() =>
         navigate({ search: (s) => ({ ...s, filter }), replace: true })
       }
       className={cn(
-        "cursor-pointer rounded-full border px-3.5 py-1 text-sm font-medium transition-colors",
+        "cursor-pointer rounded-lg border px-3.5 py-1 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         active
           ? "border-transparent bg-foreground text-background"
           : "border-input bg-transparent text-foreground hover:bg-black/5 dark:bg-input/30 dark:hover:bg-white/15",
@@ -247,7 +252,7 @@ function ScopeToggle({
   return (
     <div
       className={cn(
-        "inline-flex shrink-0 rounded-full border border-input p-0.5",
+        "inline-flex shrink-0 rounded-lg border border-input p-0.5",
         className,
       )}
     >
@@ -260,9 +265,10 @@ function ScopeToggle({
         <button
           key={value}
           type="button"
+          aria-pressed={scope === value}
           onClick={() => onChange(value)}
           className={cn(
-            "cursor-pointer rounded-full px-3 py-1 text-sm font-medium transition-colors",
+            "cursor-pointer rounded-md px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-ring",
             scope === value
               ? "bg-foreground text-background"
               : "text-muted-foreground hover:text-foreground",
@@ -862,7 +868,7 @@ function SearchField({
             type="button"
             aria-label="Clear search"
             onClick={clear}
-            className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-t5 transition-colors hover:bg-w070 hover:text-t1 focus-visible:outline-2 focus-visible:outline-ring"
           >
             <XIcon className="size-4" />
           </button>
@@ -873,32 +879,38 @@ function SearchField({
         <div
           onMouseDown={(e) => e.preventDefault()}
           className={cn(
-            frostedSurface,
-            "absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-md border text-popover-foreground shadow-md",
+            MENU_PANEL,
+            "absolute inset-x-0 top-full mt-2 overflow-hidden",
           )}
         >
-          <ul className="py-1">
+          <ul>
             {suggestions.map((h, i) => (
               <li key={h}>
                 <button
                   type="button"
                   className={cn(
-                    "flex w-full items-center gap-2 px-3 py-2 text-left text-sm",
-                    i === activeIdx ? "bg-accent" : "hover:bg-accent",
+                    MENU_ITEM,
+                    "w-full text-left hover:bg-w070 hover:text-t1 hover:[&_svg:not([class*='text-'])]:text-t3",
+                    i === activeIdx &&
+                      "bg-w070 text-t1 [&_svg:not([class*='text-'])]:text-t3",
                   )}
                   onClick={() => submitQuery(h)}
                   onMouseEnter={() => setActiveIdx(i)}
                 >
-                  <HistoryIcon className="size-4 shrink-0 text-muted-foreground" />
+                  <HistoryIcon className="size-4" />
                   <span className="truncate">{h}</span>
                 </button>
               </li>
             ))}
           </ul>
-          <div className="border-t">
+          <div className={MENU_SEPARATOR} />
+          <div>
             <button
               type="button"
-              className="w-full px-3 py-2 text-left text-xs text-muted-foreground hover:bg-accent"
+              className={cn(
+                MENU_ITEM,
+                "w-full text-left text-xs text-t6 hover:bg-w070 hover:text-t1",
+              )}
               onClick={() => {
                 clearHistory();
                 setFocused(false);

@@ -75,6 +75,19 @@ describe("menu rows align with each other", () => {
     }
   });
 
+  it("uses the shared menu chrome for search history suggestions", () => {
+    const src = readFileSync(
+      join(process.cwd(), "src/routes/search.tsx"),
+      "utf8",
+    );
+    const searchField = src.slice(src.indexOf("function SearchField("));
+    expect(searchField).toMatch(/className=\{cn\(\s*MENU_PANEL,/);
+    // Both the suggestion rows and the clear-history action are inset rows.
+    expect(searchField.match(/className=\{cn\(\s*MENU_ITEM,/g)).toHaveLength(2);
+    expect(searchField).toContain("className={MENU_SEPARATOR}");
+    expect(searchField).not.toContain("bg-accent");
+  });
+
   it("keeps the two families interchangeable, since one menu uses both", () => {
     // Any divergence shows up as the same menu looking different depending
     // on whether it was opened by right-click or by the "..." button.
