@@ -17,6 +17,8 @@ export type EntityHeaderConfig = {
    *  itself (Liked songs). */
   cover?: ReactNode;
   round: boolean;
+  /** Allow the standard thumbnail to open the shared artwork lightbox. */
+  enlargeCover?: boolean;
   onPlay?: () => void;
   onShuffle?: () => void;
   actions?: ReactNode;

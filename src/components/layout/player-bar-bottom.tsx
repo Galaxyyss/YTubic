@@ -147,7 +147,7 @@ export function PlayerBarBottom() {
             <div
               ref={coverRef}
               onPointerDown={onCoverPointerDown}
-              className="shrink-0 touch-none select-none cursor-grab active:cursor-grabbing"
+              className="shrink-0 touch-none select-none cursor-zoom-in"
             >
               {track ? (
                 <Thumbnail

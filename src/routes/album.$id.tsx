@@ -98,6 +98,7 @@ function AlbumPageView() {
           ) : undefined
         }
         thumbnails={data.thumbnails}
+        enlargeCover
         metadata={metadataParts.join(" • ")}
         onPlay={() => {
           if (tracksWithCover.length > 0) {

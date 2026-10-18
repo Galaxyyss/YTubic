@@ -471,7 +471,7 @@ export function PlayerBar({
             onPointerDown={onCoverPointerDown}
             className={cn(
               "mx-auto w-full max-w-[20rem] touch-none select-none",
-              variant !== "floating" && "cursor-grab active:cursor-grabbing",
+              variant !== "floating" && "cursor-zoom-in",
             )}
           >
             {track ? (

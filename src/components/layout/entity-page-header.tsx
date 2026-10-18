@@ -2,7 +2,11 @@ import { memo, useEffect, useRef } from "react";
 import { PlayIcon, ShuffleIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArtworkOutline } from "@/components/shared/artwork-outline";
-import { Thumbnail } from "@/components/shared/thumbnail";
+import {
+  getRenderedThumbnailSrc,
+  Thumbnail,
+} from "@/components/shared/thumbnail";
+import { openCoverLightbox } from "@/lib/store/cover-lightbox";
 import { cn } from "@/lib/utils";
 import {
   useEntityHeaderStore,
@@ -241,6 +245,20 @@ export function EntityPageHeader() {
           ref={coverOutlineRef}
           className={config.round ? "rounded-full" : "rounded-[inherit]"}
         />
+        {config.enlargeCover &&
+        config.cover == null &&
+        config.thumbnails.length > 0 ? (
+          <button
+            type="button"
+            aria-label={`Enlarge artwork for ${config.title}`}
+            aria-haspopup="dialog"
+            className="absolute inset-0 cursor-zoom-in rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            onClick={() => {
+              const url = getRenderedThumbnailSrc(coverRef.current);
+              if (url) openCoverLightbox(url, config.title);
+            }}
+          />
+        ) : null}
       </div>
 
       <h1

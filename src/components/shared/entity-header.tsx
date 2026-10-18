@@ -10,6 +10,8 @@ type Props = {
   /** Artwork the route draws itself, instead of a fetched thumbnail. */
   cover?: ReactNode;
   round?: boolean;
+  /** Enable enlargement for the standard thumbnail (not custom covers). */
+  enlargeCover?: boolean;
   onPlay?: () => void;
   onShuffle?: () => void;
   /** Extra buttons rendered after Play/Shuffle — used for entity-
@@ -36,6 +38,7 @@ export function EntityHeader({
   thumbnails,
   cover,
   round = false,
+  enlargeCover = false,
   onPlay,
   onShuffle,
   actions,
@@ -54,6 +57,7 @@ export function EntityHeader({
       thumbnails,
       cover,
       round,
+      enlargeCover,
       onPlay,
       onShuffle,
       actions,
@@ -63,6 +67,7 @@ export function EntityHeader({
   }, [
     actions,
     cover,
+    enlargeCover,
     metadata,
     keepSubtitleInCompact,
     onPlay,
