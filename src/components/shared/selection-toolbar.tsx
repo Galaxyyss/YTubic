@@ -12,6 +12,7 @@ import { IconPlaylistAddFilled } from "@/components/shared/filled-icons";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { MENU_PANEL } from "@/components/ui/menu-chrome";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,7 +45,7 @@ type Props = {
 /**
  * The bar that floats up over the bottom of the content area while
  * rows of a track list are selected. Same anchoring as the
- * jump-to-current pill (and the same body-level portal, for the same
+ * jump-to-current button (and the same body-level portal, for the same
  * backdrop-filter reason): centred in the visible content, lifted over
  * the bottom player bar when there is one.
  */
@@ -140,7 +141,7 @@ export function SelectionToolbar({ tracks, onClear }: Props) {
   const right = mode === "right" ? "23rem" : "1rem";
   const bottom = mode === "bottom" ? "6rem" : "1rem";
 
-  // In compact mode every action is a round icon with its label in a
+  // In compact mode every action is an icon button with its label in a
   // tooltip; otherwise a labelled ghost button.
   // `wrap` slots a Radix trigger between the tooltip and the button.
   const action = (
@@ -157,7 +158,6 @@ export function SelectionToolbar({ tracks, onClear }: Props) {
               variant="ghost"
               size="icon-sm"
               aria-label={label}
-              className="rounded-full"
               {...props}
             >
               {icon}
@@ -187,19 +187,16 @@ export function SelectionToolbar({ tracks, onClear }: Props) {
           role="toolbar"
           aria-label="Selected tracks"
           data-selection-ui
-          className="pointer-events-auto flex w-fit max-w-full items-center gap-1 rounded-full border border-sidebar-border p-1.5 text-sidebar-foreground shadow-lg animate-in fade-in-0 slide-in-from-bottom-2"
-          style={{
-            backgroundColor: "var(--surface)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-          }}
+          className={cn(
+            MENU_PANEL,
+            "pointer-events-auto z-20 flex w-fit max-w-full items-center gap-1 p-1.5 animate-in fade-in-0 slide-in-from-bottom-2",
+          )}
         >
           <Button
             variant="ghost"
             size="icon-sm"
             onClick={onClear}
             aria-label="Clear selection"
-            className="rounded-full"
           >
             <XIcon />
           </Button>

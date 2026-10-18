@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MENU_PANEL } from "@/components/ui/menu-chrome";
+import { cn } from "@/lib/utils";
 import { useSidebar } from "@/components/ui/sidebar";
 import { usePlaybackStore, currentTrack } from "@/lib/store/playback";
 import { useLayoutStore } from "@/lib/store/layout";
@@ -14,7 +16,7 @@ type Props = {
 };
 
 /**
- * Floating pill anchored to the bottom of the content area that scrolls
+ * Floating button anchored to the bottom of the content area that scrolls
  * the track list to whichever row matches the currently-playing track.
  * Hidden when nothing is playing, when the active track isn't in this
  * list, or when the active row is already visible in the scroll
@@ -25,7 +27,7 @@ type Props = {
  * point is inside `<main className="overflow-y-auto">` and the
  * `relative z-10` content wrapper, and Chromium reads `backdrop-filter`
  * snapshots within the nearest backdrop-rooting ancestor — `overflow`
- * scrollers and stacking-context ancestors both qualify, so the pill's
+ * scrollers and stacking-context ancestors both qualify, so the button's
  * captured backdrop came back empty even though the element was
  * `position: fixed`. Mounting at the body level escapes both.
  */
@@ -97,7 +99,7 @@ export function JumpToCurrentButton({ tracks }: Props) {
   if (!active || !inList || activeOnScreen || selecting) return null;
 
   // Match the sidebar's and side card's own (now user-resizable) widths
-  // so the pill stays horizontally centered in the visible content
+  // so the button stays horizontally centered in the visible content
   // area. The right edge moves with the player layout: tucked next to
   // the side card in `right` mode, hugging the window edge in
   // `bottom`/`floating` modes. The bottom offset lifts above the
@@ -110,15 +112,16 @@ export function JumpToCurrentButton({ tracks }: Props) {
 
   return createPortal(
     <Button
+      variant="ghost"
       size="sm"
-      className="fixed z-20 mx-auto w-fit rounded-full border border-sidebar-border text-sidebar-foreground shadow-lg transition-[left,right,bottom] duration-150 ease-linear"
+      className={cn(
+        MENU_PANEL,
+        "fixed z-20 mx-auto w-fit px-3 py-0 hover:bg-glass4 hover:text-t1 transition-[left,right,bottom,background-color,color] duration-150 ease-linear",
+      )}
       style={{
         left,
         right,
         bottom,
-        backgroundColor: "var(--surface)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
       }}
       onClick={() => {
         const el = document.querySelector<HTMLElement>(

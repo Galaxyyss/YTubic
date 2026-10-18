@@ -100,7 +100,7 @@ export function LikedCoverPicker({ className }: { className?: string }) {
       <PopoverContent
         align="start"
         sideOffset={8}
-        className="w-[268px] rounded-[12px] border-w100 bg-glass3 p-2.5 shadow-[0_18px_40px_-12px_var(--k850)] backdrop-blur-[22px] backdrop-saturate-[1.4]"
+        className="w-[268px] p-2.5"
       >
         <div className="px-1 pb-2 pt-0.5 text-[10.5px] font-semibold uppercase tracking-[0.09em] text-t4">
           Playlist cover

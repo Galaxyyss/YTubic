@@ -36,6 +36,7 @@ import {
   TrackRowSkeletonList,
 } from "@/components/shared/skeletons";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   MENU_ITEM,
   MENU_PANEL,
@@ -420,9 +421,8 @@ function TopResultHero({
   action?: TopResultAction;
 }) {
   const [pending, setPending] = useState(false);
-  const radius = item.round
-    ? "rounded-full"
-    : item.kind === "album" || item.kind === "playlist"
+  const radius =
+    item.kind === "artist" || item.kind === "album" || item.kind === "playlist"
       ? "rounded-lg"
       : "rounded-md";
   const isEntity =
@@ -494,7 +494,6 @@ function TopResultHero({
           <Thumbnail
             thumbnails={item.thumbnails}
             alt={item.title}
-            round={item.round}
             className={cn("size-full", radius)}
             targetSize={320}
             highRes
@@ -520,12 +519,14 @@ function TopResultHero({
       </div>
 
       {action ? (
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="lg"
           onClick={runAction}
           disabled={pending}
           aria-label={action.label}
-          className="pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-2 rounded-full border border-input bg-w050 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-w100 disabled:opacity-60"
+          className="pointer-events-auto relative z-10 shrink-0"
         >
           {pending ? (
             <Loader2Icon className="size-4 animate-spin" />
@@ -535,7 +536,7 @@ function TopResultHero({
             <PlayIcon className="size-4 fill-current" />
           )}
           {action.label}
-        </button>
+        </Button>
       ) : null}
 
       {isEntity ? (

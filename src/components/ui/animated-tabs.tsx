@@ -84,8 +84,8 @@ export function AnimatedTabs({
   const baseContainerStyles = cn(
     "relative inline-flex",
     variant === "underline" && "gap-1 border-border border-b",
-    variant === "pill" && "gap-1 rounded-full bg-muted p-1",
-    variant === "segment" && "gap-0 rounded-lg bg-muted p-1",
+    variant === "pill" && "gap-1 rounded-lg bg-w050 p-1",
+    variant === "segment" && "gap-0 rounded-lg bg-w050 p-1",
   );
 
   const getTabStyles = (isActive: boolean) =>
@@ -99,7 +99,7 @@ export function AnimatedTabs({
           : "text-muted-foreground hover:text-foreground",
       ],
       variant === "pill" && [
-        "rounded-full",
+        "rounded-md",
         isActive
           ? "text-foreground"
           : "text-muted-foreground hover:text-foreground",
@@ -117,9 +117,9 @@ export function AnimatedTabs({
       "absolute",
       variant === "underline" && "right-0 -bottom-px left-0 h-0.5 bg-brand",
       variant === "pill" &&
-        "inset-0 rounded-full border border-border bg-background shadow-sm",
+        "inset-0 rounded-md border border-w100 bg-w100 shadow-sm",
       variant === "segment" &&
-        "inset-0 rounded-md border border-border bg-background shadow-sm",
+        "inset-0 rounded-md border border-w100 bg-w100 shadow-sm",
     );
 
   return (

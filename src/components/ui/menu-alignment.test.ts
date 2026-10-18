@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { MENU_CHOICE_ITEM, MENU_ITEM } from "@/components/ui/menu-chrome";
+import {
+  MENU_CHOICE_ITEM,
+  MENU_COMMAND_ITEM,
+  MENU_ITEM,
+} from "@/components/ui/menu-chrome";
 
 /**
  * Every row of a menu has to line up with the rows above and below it.
@@ -34,6 +38,7 @@ const LAYOUT = ["flex", "items-center", "gap-[11px]", "px-2.5", "py-1.5"];
  * tick without wrapping, but they carry the same layout tokens.
  */
 const ROWS: [string, string, string][] = [
+  ["command.tsx", "command-item", "MENU_COMMAND_ITEM"],
   ["context-menu.tsx", "context-menu-item", "MENU_ITEM"],
   ["context-menu.tsx", "context-menu-checkbox-item", "MENU_CHOICE_ITEM"],
   ["context-menu.tsx", "context-menu-radio-item", "MENU_CHOICE_ITEM"],
@@ -67,12 +72,27 @@ describe("menu rows align with each other", () => {
 
   it.each([
     ["MENU_ITEM", MENU_ITEM],
+    ["MENU_COMMAND_ITEM", MENU_COMMAND_ITEM],
     ["MENU_CHOICE_ITEM", MENU_CHOICE_ITEM],
   ])("%s carries the shared layout", (name, value) => {
     const cls = value.split(/\s+/).filter(Boolean);
     for (const token of LAYOUT) {
       expect(cls, `${name} is missing "${token}"`).toContain(token);
     }
+  });
+
+  it.each([
+    ["popover.tsx", "popover-content"],
+    ["command.tsx", "command"],
+  ])("%s uses the shared glass panel", (file, slot) => {
+    expect(baseOfSlot(file, slot)).toBe("MENU_PANEL");
+  });
+
+  it("respects cmdk's explicit disabled and selected attribute values", () => {
+    expect(MENU_COMMAND_ITEM).toContain("data-[disabled=true]:pointer-events-none");
+    expect(MENU_COMMAND_ITEM).not.toContain("data-[disabled]:");
+    expect(MENU_COMMAND_ITEM).toContain("data-[selected=true]:bg-w070");
+    expect(MENU_COMMAND_ITEM).not.toContain("data-[selected]:");
   });
 
   it("uses the shared menu chrome for search history suggestions", () => {

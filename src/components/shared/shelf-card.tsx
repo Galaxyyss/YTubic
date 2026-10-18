@@ -147,16 +147,11 @@ export function ShelfCard({ item, className }: Props) {
     "";
 
   const isVideo = item.kind === "video";
-  // Albums and playlists get a slightly softer corner than the
-  // default rounded-md (6px) — 8px / rounded-lg reads as "physical
-  // record sleeve" vs the tighter rounding on songs/videos.
-  const isAlbumOrPlaylist =
-    item.kind === "album" || item.kind === "playlist";
-  const radiusClass = item.round
-    ? "rounded-full"
-    : isAlbumOrPlaylist
-      ? "rounded-lg"
-      : "rounded-md";
+  // Entity artwork shares the rounded-square treatment of its detail
+  // header; song/video thumbnails keep the tighter default corners.
+  const isEntity =
+    item.kind === "artist" || item.kind === "album" || item.kind === "playlist";
+  const radiusClass = isEntity ? "rounded-lg" : "rounded-md";
 
   // Only playlists are hideable, so this is always false for other kinds
   // — the badge below scopes itself to hidden playlists. Reading it here
@@ -205,7 +200,6 @@ export function ShelfCard({ item, className }: Props) {
           <Thumbnail
             thumbnails={item.thumbnails}
             alt={item.title}
-            round={item.round}
             className={cn("size-full", radiusClass)}
             targetSize={isVideo ? 480 : 256}
             highRes
@@ -247,12 +241,7 @@ export function ShelfCard({ item, className }: Props) {
         ) : null}
       </div>
       <div className="flex min-w-0 flex-col gap-0.5">
-        <div
-          className={cn(
-            "flex min-w-0 items-center gap-1.5",
-            item.round && "justify-center",
-          )}
-        >
+        <div className="flex min-w-0 items-center gap-1.5">
           <span className="truncate text-sm font-medium">{item.title}</span>
           {item.explicit ? <ExplicitBadge /> : null}
         </div>
@@ -260,19 +249,11 @@ export function ShelfCard({ item, className }: Props) {
           <ArtistLinks
             artists={item.artists}
             fallback={subtitle}
-            className={cn(
-              "truncate text-xs text-muted-foreground",
-              item.round && "text-center",
-            )}
+            className="truncate text-xs text-muted-foreground"
             linkClassName="pointer-events-auto"
           />
         ) : subtitle ? (
-          <span
-            className={cn(
-              "truncate text-xs text-muted-foreground",
-              item.round && "text-center",
-            )}
-          >
+          <span className="truncate text-xs text-muted-foreground">
             {subtitle}
           </span>
         ) : null}

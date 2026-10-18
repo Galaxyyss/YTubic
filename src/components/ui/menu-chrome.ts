@@ -1,8 +1,7 @@
 /**
- * Shared chrome for the two menu families — the dropdown menus (window
- * menu, player more-menu, lyrics source, playlist actions) and the
- * right-click context menus. They are separate Radix primitives with
- * separate wrappers, so without this they drift apart.
+ * Shared chrome for dropdown/context menus, popovers, search suggestions,
+ * command lists, and floating track controls. Reusing the surface and row
+ * recipes keeps these separate primitives visually aligned.
  *
  * The panel follows the design handoff: a 12px glass sheet on `glass3`
  * with a 22px blur, one step less transparent than the dialogs' own
@@ -35,13 +34,23 @@ export const MENU_MOTION =
  * so the whole row reads as one object on hover rather than a bright
  * glyph next to dim text.
  */
-export const MENU_ITEM =
+const MENU_ROW =
   "relative flex cursor-pointer items-center gap-[11px] rounded-md px-2.5 py-1.5 " +
   "text-[13.5px] outline-hidden transition-colors duration-[140ms] select-none " +
+  "[&_svg]:pointer-events-none [&_svg]:shrink-0 " +
+  "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-t5 ";
+
+export const MENU_ITEM =
+  MENU_ROW +
   "focus:bg-w070 focus:text-t1 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 " +
-  "data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 " +
-  "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-t5 " +
-  "focus:[&_svg:not([class*='text-'])]:text-t3";
+  "data-[inset]:pl-8 focus:[&_svg:not([class*='text-'])]:text-t3";
+
+/** cmdk uses explicit true/false attributes, unlike Radix's presence flags. */
+export const MENU_COMMAND_ITEM =
+  MENU_ROW +
+  "data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 " +
+  "data-[selected=true]:bg-w070 data-[selected=true]:text-t1 " +
+  "data-[selected=true]:[&_svg:not([class*='text-'])]:text-t3";
 
 /**
  * Destructive rows (Quit, Sign out, Remove from Liked, cache wipes).
