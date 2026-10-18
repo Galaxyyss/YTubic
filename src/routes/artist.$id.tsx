@@ -74,9 +74,22 @@ function ArtistPageView() {
     <div className="flex flex-col gap-8 px-6 pb-6 pt-3">
       <EntityHeader
         title={data.name}
-        subtitle={subtitle}
+        subtitle={
+          <>
+            <span className="text-xs font-semibold uppercase tracking-wider text-foreground/60">
+              Artist
+            </span>
+            {subtitle ? (
+              <>
+                <span aria-hidden="true" className="mx-2 text-foreground/25">
+                  •
+                </span>
+                {subtitle}
+              </>
+            ) : null}
+          </>
+        }
         thumbnails={data.thumbnails}
-        round
         actions={<ArtistActions artist={data} />}
       />
 
@@ -189,7 +202,7 @@ function ArtistActions({ artist }: { artist: ArtistPage }) {
         <Button
           onClick={() => play("shuffle", artist.shuffle)}
           disabled={pending !== null}
-          className="bg-brand text-white hover:bg-brand/90"
+          className="bg-brand px-5 text-white hover:bg-brand/90"
         >
           {pending === "shuffle" ? (
             <Loader2Icon className="animate-spin" />
@@ -202,6 +215,7 @@ function ArtistActions({ artist }: { artist: ArtistPage }) {
       {artist.mix ? (
         <Button
           variant="outline"
+          className="px-4"
           onClick={() => play("mix", artist.mix)}
           disabled={pending !== null}
         >
@@ -285,8 +299,8 @@ function SubscribeButton({
       variant={subscribed ? "ghost" : "outline"}
       className={
         subscribed
-          ? "bg-foreground/[0.12] text-foreground shadow-none hover:bg-foreground/[0.18]"
-          : undefined
+          ? "bg-foreground/[0.12] px-4 text-foreground shadow-none hover:bg-foreground/[0.18]"
+          : "px-4"
       }
       onClick={toggle}
       disabled={pending}
@@ -449,8 +463,8 @@ function ListShelf({
 function ArtistSkeleton() {
   return (
     <div className="flex flex-col gap-8 px-6 pb-6 pt-3">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end">
-        <Skeleton className="size-[148px] rounded-full" />
+      <div className="flex flex-row items-center gap-[34px]">
+        <Skeleton className="size-[148px] rounded-xl border border-hairline shadow-lg" />
         <div className="flex flex-col gap-2">
           <Skeleton className="h-[46px] w-64" />
           <Skeleton className="h-5 w-40" />
