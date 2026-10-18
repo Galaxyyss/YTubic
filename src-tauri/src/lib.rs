@@ -26,6 +26,8 @@ use tower_http::services::ServeFile;
 
 mod appid;
 mod discord;
+#[cfg(target_os = "linux")]
+mod linux_graphics;
 mod media;
 // Grants the microphone to our own pages without WebView2's dialog; the
 // Playback tab needs it to name and pick output devices. Ported from
@@ -3486,6 +3488,11 @@ fn build_tray(app: &tauri::AppHandle) -> tauri::Result<()> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // Configure WebKit before GTK/Tauri initialization and worker threads.
+    // No-op outside Linux; respects an explicit compositor preference.
+    #[cfg(target_os = "linux")]
+    linux_graphics::configure();
+
     // Register + pin the app's Windows identity (AppUserModelID) so the SMTC
     // media tile (and notifications, taskbar) resolve to "YTubic" + icon rather
     // than "Unknown app". Must run before any window is created. No-op off
