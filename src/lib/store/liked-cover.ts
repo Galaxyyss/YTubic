@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-/** The four covers the design ships. See `liked-cover.tsx` for the art. */
-export type LikedCoverPreset = "ytubic" | "default" | "clear" | "glow";
+/** Cover presets, including the theme-aware default. See `liked-cover.tsx`. */
+export type LikedCoverPreset = "theme" | "ytubic" | "default" | "clear" | "glow";
+
+export const DEFAULT_LIKED_COVER_PRESET: LikedCoverPreset = "theme";
 
 type State = {
   preset: LikedCoverPreset;
@@ -30,7 +32,7 @@ type State = {
 export const useLikedCoverStore = create<State>()(
   persist(
     (set) => ({
-      preset: "ytubic",
+      preset: DEFAULT_LIKED_COVER_PRESET,
       custom: null,
       setPreset: (preset) => set({ preset, custom: null }),
       setCustom: (custom) => set({ custom }),

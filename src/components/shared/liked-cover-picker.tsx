@@ -45,15 +45,15 @@ async function toCoverDataUrl(file: File): Promise<string> {
 }
 
 const OPTION =
-  "flex cursor-pointer flex-col items-center gap-1.5 rounded-[9px] px-2 pb-1.5 pt-2 transition-colors duration-[140ms] hover:bg-w060";
+  "flex cursor-pointer flex-col items-center gap-1.5 rounded-[9px] px-2 pb-1.5 pt-2 transition-colors duration-[140ms] hover:bg-w060 focus-visible:outline-2 focus-visible:outline-ring";
 
 /**
- * The cover picker for Liked songs: the four covers from the design,
- * plus a picture of the user's own.
+ * The cover picker for Liked songs: the theme-aware default, legacy
+ * presets, and a picture of the user's own.
  *
  * Sits on the hero artwork as a button that only shows on hover, so the
  * page reads as artwork until you go looking for the control. The panel
- * is a popover rather than a menu because a 4-up grid of swatches is not
+ * is a popover rather than a menu because a grid of swatches is not
  * a list of rows, and menu keyboard semantics would fight it.
  */
 export function LikedCoverPicker({ className }: { className?: string }) {
@@ -106,13 +106,15 @@ export function LikedCoverPicker({ className }: { className?: string }) {
           Playlist cover
         </div>
 
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-3 gap-1">
           {LIKED_COVER_ORDER.map((key) => {
             const on = !custom && preset === key;
             return (
               <button
                 key={key}
                 type="button"
+                aria-label={`${LIKED_COVERS[key].label} cover`}
+                aria-pressed={on}
                 onClick={() => setPreset(key)}
                 className={cn(OPTION, on && "bg-w070 hover:bg-w070")}
               >

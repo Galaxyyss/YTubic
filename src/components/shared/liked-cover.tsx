@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
+import { HeartIcon, ThumbsUpIcon } from "lucide-react";
 import {
+  DEFAULT_LIKED_COVER_PRESET,
   useLikedCoverStore,
   type LikedCoverPreset,
 } from "@/lib/store/liked-cover";
@@ -8,21 +10,30 @@ import { cn } from "@/lib/utils";
 
 type CoverArt = {
   label: string;
-  /** Any `background` shorthand: the four covers are gradients or a fill. */
+  /** Any CSS `background` shorthand, including theme-aware layers. */
   bg: string;
   /** Two of them are glass and read the wash behind the panel. */
   blur?: string;
   /** Hairline inside the tile's own edge. */
   ring: string;
-  /** The heart on top of the art. */
+  /** The glyph colour on top of the art. */
   fill: string;
+  /** Use the app's outlined rating icon instead of the legacy filled art. */
+  outline?: boolean;
 };
 
 /**
- * The covers from the design handoff, in the order the picker shows
- * them. Values are the prototype's, down to the gradient stops.
+ * A theme-aware neutral cover plus the original design presets.
+ * The Theme preset follows the light/dark palette and accent colour.
  */
 export const LIKED_COVERS: Record<LikedCoverPreset, CoverArt> = {
+  theme: {
+    label: "Theme",
+    bg: "radial-gradient(120% 100% at 0% 0%, rgba(var(--acc1rgb),0.10), transparent 65%), linear-gradient(145deg, var(--w090), var(--w020)), var(--surface)",
+    ring: "var(--w100)",
+    fill: "var(--t2)",
+    outline: true,
+  },
   ytubic: {
     label: "YTubic",
     bg: "radial-gradient(130% 110% at 22% 12%,#FF5F79,#E8214C 34%,#8E1230 68%,#2A0913)",
@@ -30,7 +41,7 @@ export const LIKED_COVERS: Record<LikedCoverPreset, CoverArt> = {
     fill: "rgba(255,255,255,0.94)",
   },
   default: {
-    label: "Default",
+    label: "Classic",
     bg: "linear-gradient(150deg,#6C4BFF 0%,#C93BC0 55%,#FF4E7A 100%)",
     ring: "var(--w120)",
     fill: "rgba(255,255,255,0.92)",
@@ -52,6 +63,7 @@ export const LIKED_COVERS: Record<LikedCoverPreset, CoverArt> = {
 };
 
 export const LIKED_COVER_ORDER: LikedCoverPreset[] = [
+  DEFAULT_LIKED_COVER_PRESET,
   "ytubic",
   "default",
   "clear",
@@ -94,6 +106,7 @@ export function LikedCoverArt({
   blur?: boolean;
 } & ComponentProps<"span">) {
   const thumb = useSettingsStore((s) => s.ratingButtons === "both");
+  const OutlineIcon = thumb ? ThumbsUpIcon : HeartIcon;
   return (
     <span
       aria-hidden
@@ -106,14 +119,22 @@ export function LikedCoverArt({
         boxShadow: `inset 0 0 0 1px ${art.ring}`,
       }}
     >
-      <svg
-        viewBox="0 0 24 24"
-        fill={art.fill}
-        style={{ width: `${heart}%` }}
-        aria-hidden
-      >
-        <path d={thumb ? THUMB : HEART} />
-      </svg>
+      {art.outline ? (
+        <OutlineIcon
+          style={{ width: `${heart}%`, height: "auto", color: art.fill }}
+          strokeWidth={1.5}
+          aria-hidden
+        />
+      ) : (
+        <svg
+          viewBox="0 0 24 24"
+          fill={art.fill}
+          style={{ width: `${heart}%` }}
+          aria-hidden
+        >
+          <path d={thumb ? THUMB : HEART} />
+        </svg>
+      )}
     </span>
   );
 }
@@ -147,7 +168,7 @@ export function LikedCover({
 
   return (
     <LikedCoverArt
-      art={LIKED_COVERS[preset] ?? LIKED_COVERS.ytubic}
+      art={LIKED_COVERS[preset] ?? LIKED_COVERS[DEFAULT_LIKED_COVER_PRESET]}
       className={className}
       heart={heart}
       blur={false}
